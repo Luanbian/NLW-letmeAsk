@@ -3,6 +3,7 @@ import logoImg from '../assets/images/logo.svg';
 import googleIcon from '../assets/images/google-icon.svg';
 import '../styles/auth.scss';
 import { Button } from '../components/Button';
+import {Link} from 'react-router-dom';
 
 export function Home(){
     return (
@@ -15,10 +16,10 @@ export function Home(){
             <main>
                 <div className='main-container'>
                     <img src={logoImg} alt="logo"/>
-                    <button className='create-room'>
+                    <Link to={'/rooms/new'} className='create-room'>
                         <img src={googleIcon} alt="logo da Google"/>
                         Crie sua sala com o Google
-                    </button>
+                    </Link>
                     <div className='separator'> ou entre em uma sala</div>
                     <form>
                         <input type="text" placeholder='digite o código da sala'/>
