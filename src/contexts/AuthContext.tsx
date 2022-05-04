@@ -12,7 +12,7 @@ interface IauthContext {
   signInWithGoogle: () => Promise<void>;
 }
 interface IpropsAuth{
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export const AuthContext = createContext({} as IauthContext);
@@ -60,9 +60,9 @@ export function AuthContextProvider(props: IpropsAuth){
     }
   }
 
-    return(
-        <AuthContext.Provider value={{user, signInWithGoogle}}>
-            {props.children}
-        </AuthContext.Provider>
-    );
+  return(
+    <AuthContext.Provider value={{user, signInWithGoogle}}>
+      {props.children}
+    </AuthContext.Provider>
+  );
 }
