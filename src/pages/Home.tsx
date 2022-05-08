@@ -6,7 +6,7 @@ import { Button } from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { FormEvent, useState } from 'react';
-import { database, getDoc, doc} from '../services/firebase';
+import { db, getDoc, doc} from '../services/firebase';
 
 export function Home(){
     const {user, signInWithGoogle} = useAuth();
@@ -26,7 +26,7 @@ export function Home(){
             return;
         }
 
-        const docRef = doc(database, `rooms/${roomCode}`);
+        const docRef = doc(db, `rooms/${roomCode}`);
         const roomRef = await getDoc(docRef);
         
         if(roomRef.exists()){
