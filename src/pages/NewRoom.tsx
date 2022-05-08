@@ -4,7 +4,7 @@ import logoImg from '../assets/images/logo.svg';
 import '../styles/auth.scss';
 import { Button } from '../components/Button';
 import  React, {FormEvent, useState} from 'react';
-import { database, ref, set, push} from '../services/firebase';
+import { database} from '../services/firebase';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,10 +20,9 @@ export function NewRoom(){
             return;
         }
 
-        const roomRef = ref(database, 'rooms');
-        const firebaseRoom = await push(roomRef);
+        const roomRef = database.ref('room');
 
-        await set(firebaseRoom, {
+        const firebaseRoom = await roomRef.push({
             title: newRoom,
             authorId: user?.id
         });

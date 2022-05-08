@@ -6,7 +6,7 @@ import { Button } from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { FormEvent, useState } from 'react';
-//import {ref, database} from '../services/firebase';
+import {database} from '../services/firebase';
 
 export function Home(){
     const {user, signInWithGoogle} = useAuth();
@@ -26,15 +26,15 @@ export function Home(){
         if(roomCode.trim() === ''){
             return;
         }
-/*
-        const roomRef = ref(database, `rooms/${roomCode}`).get();
+
+        const roomRef = await database.ref(`rooms/${roomCode}`).get();
         
         if(roomRef.exists()){
             navigate(`rooms/${roomCode}`)
         } else {
             alert('Room does not exist');
         }
-*/
+
     }
 
     return (
