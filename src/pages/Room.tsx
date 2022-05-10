@@ -1,7 +1,10 @@
+import { FormEvent, useState } from 'react';
 import {useParams} from  'react-router-dom';
 import Logoimg from '../assets/images/logo.svg'
 import { Button } from '../components/Button';
 import { RoomCode } from '../components/RoomCode';
+import { useAuth } from '../hooks/useAuth';
+import { database } from '../services/firebase';
 import '../styles/room.scss';
  
 type RoomParams = {
@@ -9,15 +12,41 @@ type RoomParams = {
 }
 
 export function Room(){
+    const {user} = useAuth();
+    const [newQuestion, setNewQuestion] = useState<String>('');
     const params = useParams<RoomParams>();
+    const roomId = params.id;
 
+    async function handleSendQuestion(event: FormEvent){
+        event.preventDefault();
+
+        if(newQuestion.trim() === ''){
+            return;
+        }
+
+        if(!user){
+            throw new Error('Você deve logar primeiro')
+        }
+
+        const question = {
+            content: newQuestion,
+            author:{
+                name: user.name,
+                avatar: user.avatar
+            },
+            isHighLighted: false,
+            isAnswered: false
+        }
+
+        await database.ref(`/rooms/${roomId}/questions`).push(question);
+    }
 
     return (
         <div id="page-room"> 
             <header>
                 <div className="content">
                     <img src={Logoimg} alt="letmeask logo"/>
-                    <RoomCode code={String(params.id)} />
+                    <RoomCode code={String(roomId)}/>
                 </div> 
             </header>
             <main>
@@ -26,11 +55,14 @@ export function Room(){
                     <span>4 perguntas</span>
                 </div>
 
-                <form>
-                    <textarea placeholder='O que você quer perguntar?'/>
+                <form onSubmit={handleSendQuestion}>
+                    <textarea 
+                    placeholder='O que você quer perguntar?'
+                    onChange={(event) => {setNewQuestion(event.target.value)}}
+                    />
                     <div className='form-footer'>
                         <span>Para enviar uma pergunta, <button>Faça seu login</button>.</span>
-                        <Button type='submit'>Enviar pergunta</Button>
+                        <Button type='submit' disabled={!user}>Enviar pergunta</Button>
                     </div>
                 </form>
             </main>
