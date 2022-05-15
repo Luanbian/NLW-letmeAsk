@@ -1,4 +1,4 @@
-import {useParams} from  'react-router-dom';
+import {useNavigate, useParams} from  'react-router-dom';
 import Logoimg from '../assets/images/logo.svg'
 import deleteImg from '../assets/images/delete.svg';
 import { Button } from '../components/Button';
@@ -16,11 +16,18 @@ export function AdminRoom(){
     const params = useParams<RoomParams>();
     const roomId = params.id;
     const {title, questions} = useRoom(String(roomId));
+    const navigate = useNavigate();
+
+    async function handleEndRoom(){
+        database.ref(`rooms/${roomId}`).update({
+            endedAt: new Date(),
+        })
+        navigate('/');
+    }
 
     async function handleDeleteQuestion(questionId: string){
         if (window.confirm('Tem certeza que você deseja excluir esta pergunta?')){
             await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
-            return;
         }
     }
 
@@ -31,7 +38,7 @@ export function AdminRoom(){
                     <img src={Logoimg} alt="letmeask logo"/>
                     <div>
                         <RoomCode code={String(roomId)}/>
-                        <Button>Encerrar sala</Button>
+                        <Button isOutLined onClick={handleEndRoom}>Encerrar sala</Button>
                     </div>
                 </div> 
             </header>
