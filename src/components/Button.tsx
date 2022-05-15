@@ -7,6 +7,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function Button({ isOutLined = false, ...props}:ButtonProps){
     return(
-        <button className="button" {...props}/>
+        <button 
+            className={`button ${isOutLined ? 'outlined' : ''}`} 
+            {...props}
+        />
     )
 }
